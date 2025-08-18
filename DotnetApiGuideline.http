@@ -1,6 +1,48 @@
-@DotnetApiGuideline_HostAddress = http://localhost:5249
+@DotnetApiGuideline_HostAddress = https://localhost:5001
 
-GET {{DotnetApiGuideline_HostAddress}}/weatherforecast/
+### Get all weather forecasts
+GET {{DotnetApiGuideline_HostAddress}}/api/weatherforecast
+Accept: application/json
+
+###
+
+### Get weather forecast by ID
+GET {{DotnetApiGuideline_HostAddress}}/api/weatherforecast/1
+Accept: application/json
+
+###
+
+### Create a new weather forecast
+POST {{DotnetApiGuideline_HostAddress}}/api/weatherforecast
+Content-Type: application/json
+
+{
+  "date": "2025-08-25",
+  "temperatureC": 22,
+  "summary": "Sunny"
+}
+
+###
+
+### Update weather forecast
+PUT {{DotnetApiGuideline_HostAddress}}/api/weatherforecast/1
+Content-Type: application/json
+
+{
+  "date": "2025-08-19",
+  "temperatureC": 25,
+  "summary": "Very Warm"
+}
+
+###
+
+### Delete weather forecast
+DELETE {{DotnetApiGuideline_HostAddress}}/api/weatherforecast/1
+
+###
+
+### Generate random weather forecasts
+POST {{DotnetApiGuideline_HostAddress}}/api/weatherforecast/generate?count=5
 Accept: application/json
 
 ###
