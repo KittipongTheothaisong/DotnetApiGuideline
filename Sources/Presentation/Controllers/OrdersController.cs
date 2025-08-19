@@ -1,6 +1,7 @@
 using DotnetApiGuideline.Sources.Application.Interfaces;
 using DotnetApiGuideline.Sources.Application.Models;
 using DotnetApiGuideline.Sources.Domain.Enums;
+using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using DotnetApiGuideline.Sources.Presentation.Requests;
 using DotnetApiGuideline.Sources.Presentation.Responses;
 using Microsoft.AspNetCore.Mvc;

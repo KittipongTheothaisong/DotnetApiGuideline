@@ -1,6 +1,7 @@
 using DotnetApiGuideline.Sources.Application.Interfaces;
 using DotnetApiGuideline.Sources.Application.Services;
 using DotnetApiGuideline.Sources.Domain.Interfaces;
+using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using DotnetApiGuideline.Sources.Infrastructure.Data;
 using DotnetApiGuideline.Sources.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,14 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        // Add DbContext with In-Memory Database
+        // Configure settings
+        var settings = new AppSettings();
+        configuration.Bind(settings);
+        services.AddSingleton(settings);
+
+        // Add DbContext with SQL Server using settings
         services.AddDbContext<AppDbContext>(options =>
-            options.UseInMemoryDatabase(databaseName: "AppDbContext")
+            options.UseSqlServer(settings.ConnectionStrings.DefaultConnection)
         );
 
         // Register repositories
