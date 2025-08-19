@@ -1,7 +1,5 @@
 using DotnetApiGuideline.Sources.Application.Interfaces;
-using DotnetApiGuideline.Sources.Application.Models;
 using DotnetApiGuideline.Sources.Domain.Enums;
-using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using DotnetApiGuideline.Sources.Presentation.Requests;
 using DotnetApiGuideline.Sources.Presentation.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DotnetApiGuideline.Sources.Presentation.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/orders")]
 public class OrdersController(IOrderService orderService) : ControllerBase
 {
     private readonly IOrderService _orderService = orderService;
@@ -26,31 +24,6 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     {
         var order = await _orderService.GetOrderByIdAsync(id);
         return Ok(OrderResponse.FromOrder(order));
-    }
-
-    [HttpGet("by_order_number/{orderNumber}")]
-    public async Task<ActionResult<OrderResponse>> GetOrderByOrderNumber(string orderNumber)
-    {
-        var order = await _orderService.GetOrderByOrderNumberAsync(orderNumber);
-        return Ok(OrderResponse.FromOrder(order));
-    }
-
-    [HttpGet("by_customer/{customerEmail}")]
-    public async Task<ActionResult<IEnumerable<OrderResponse>>> GetOrdersByCustomerEmail(
-        string customerEmail
-    )
-    {
-        var orders = await _orderService.GetOrdersByCustomerEmailAsync(customerEmail);
-        return Ok(orders.Select(OrderResponse.FromOrder));
-    }
-
-    [HttpGet("by_status/{status}")]
-    public async Task<ActionResult<IEnumerable<OrderResponse>>> GetOrdersByStatus(
-        OrderStatus status
-    )
-    {
-        var orders = await _orderService.GetOrdersByStatusAsync(status);
-        return Ok(orders.Select(OrderResponse.FromOrder));
     }
 
     [HttpPost]
@@ -86,12 +59,5 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     {
         await _orderService.DeleteOrderAsync(id);
         return NoContent();
-    }
-
-    [HttpGet("order_number_exists/{orderNumber}")]
-    public async Task<ActionResult<bool>> OrderNumberExists(string orderNumber)
-    {
-        var exists = await _orderService.OrderNumberExistsAsync(orderNumber);
-        return Ok(exists);
     }
 }
