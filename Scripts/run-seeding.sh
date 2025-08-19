@@ -3,6 +3,7 @@
 # ===================================================================
 # DotnetApiGuideline - Database Seeding Script Runner
 # Description: Executes SQL scripts for database initialization
+# Note: Uses snake_case naming convention for consistency with EF Core
 # ===================================================================
 
 # Configuration

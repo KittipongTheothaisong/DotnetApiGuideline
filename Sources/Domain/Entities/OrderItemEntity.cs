@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Domain.Entities;
 
+[Table("order_items")]
 public class OrderItemEntity : BaseEntity
 {
     public Guid OrderId { get; private set; }

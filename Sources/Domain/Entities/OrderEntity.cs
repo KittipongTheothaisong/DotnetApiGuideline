@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using DotnetApiGuideline.Sources.Domain.Enums;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
 using OrderManagement.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Domain.Entities;
 
+[Table("orders")]
 public class OrderEntity : BaseEntity
 {
     public string OrderNumber { get; set; } = string.Empty;

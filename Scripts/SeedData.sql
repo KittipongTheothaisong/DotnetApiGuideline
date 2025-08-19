@@ -8,30 +8,30 @@ USE DotnetApiGuidelineDb;
 GO
 
 -- Clear existing data (in correct order to respect foreign key constraints)
-DELETE FROM OrderItemEntity;
-DELETE FROM Orders;
-DELETE FROM Customers;
-DELETE FROM Products;
+DELETE FROM order_items;
+DELETE FROM orders;
+DELETE FROM customers;
+DELETE FROM products;
 GO
 
 -- ===================================================================
 -- SEED CUSTOMER DATA
 -- ===================================================================
-INSERT INTO Customers (
-    Id, 
-    Name, 
+INSERT INTO customers (
+    id, 
+    name, 
     email, 
-    Phone, 
+    phone, 
     address_street, 
     address_city, 
     address_state, 
     address_country, 
     address_zip_code, 
-    Tier, 
-    CreatedBy, 
-    CreatedDate, 
-    UpdatedBy, 
-    UpdatedDate
+    tier, 
+    created_by, 
+    created_date, 
+    updated_by, 
+    updated_date
 ) VALUES 
 -- Regular Customers
 ('11111111-1111-1111-1111-111111111111', 'John Smith', 'john.smith@email.com', '+1-555-0101', '123 Main St', 'New York', 'NY', 'USA', '10001', 0, NULL, GETUTCDATE(), NULL, GETUTCDATE()),
@@ -55,19 +55,19 @@ GO
 -- ===================================================================
 -- SEED PRODUCT DATA
 -- ===================================================================
-INSERT INTO Products (
-    Id, 
-    Name, 
-    Description, 
-    Sku, 
+INSERT INTO products (
+    id, 
+    name, 
+    description, 
+    sku, 
     price_amount, 
     price_currency, 
-    StockQuantity, 
-    IsActive, 
-    CreatedBy, 
-    CreatedDate, 
-    UpdatedBy, 
-    UpdatedDate
+    stock_quantity, 
+    is_active, 
+    created_by, 
+    created_date, 
+    updated_by, 
+    updated_date
 ) VALUES 
 -- Electronics
 ('10000001-0000-0000-0000-000000000001', 'iPhone 15 Pro Max', 'Latest Apple iPhone with Pro Max features', 'IPHONE-15-PM-256', 1299.99, 'USD', 50, 1, NULL, GETUTCDATE(), NULL, GETUTCDATE()),
@@ -101,21 +101,21 @@ GO
 -- ===================================================================
 -- SEED ORDER DATA
 -- ===================================================================
-INSERT INTO Orders (
-    Id, 
-    OrderNumber, 
-    CustomerId, 
-    Status, 
+INSERT INTO orders (
+    id, 
+    order_number, 
+    customer_id, 
+    status, 
     shipping_address_street, 
     shipping_address_city, 
     shipping_address_state, 
     shipping_address_country, 
     shipping_address_zip_code, 
-    Notes, 
-    CreatedBy, 
-    CreatedDate, 
-    UpdatedBy, 
-    UpdatedDate
+    notes, 
+    created_by, 
+    created_date, 
+    updated_by, 
+    updated_date
 ) VALUES 
 -- Completed Orders
 ('50000001-0000-0000-0000-000000000001', 'ORD-2025-001', '11111111-1111-1111-1111-111111111111', 3, '123 Main St', 'New York', 'NY', 'USA', '10001', 'Customer requested express delivery', NULL, DATEADD(day, -15, GETUTCDATE()), NULL, DATEADD(day, -15, GETUTCDATE())),
@@ -139,17 +139,17 @@ GO
 -- ===================================================================
 -- SEED ORDER ITEM DATA
 -- ===================================================================
-INSERT INTO OrderItemEntity (
-    Id, 
-    OrderId, 
-    ProductId, 
-    Quantity, 
+INSERT INTO order_items (
+    id, 
+    order_id, 
+    product_id, 
+    quantity, 
     unit_price_amount, 
     unit_price_currency, 
-    CreatedBy, 
-    CreatedDate, 
-    UpdatedBy, 
-    UpdatedDate
+    created_by, 
+    created_date, 
+    updated_by, 
+    updated_date
 ) VALUES 
 -- Order 1 Items (Electronics Bundle)
 ('60000001-0000-0000-0000-000000000001', '50000001-0000-0000-0000-000000000001', '10000001-0000-0000-0000-000000000001', 1, 1299.99, 'USD', NULL, DATEADD(day, -15, GETUTCDATE()), NULL, DATEADD(day, -15, GETUTCDATE())),
@@ -202,32 +202,32 @@ PRINT 'Data seeding completed successfully!';
 PRINT '';
 PRINT 'Summary of seeded data:';
 
-SELECT 'Customers' as TableName, COUNT(*) as RecordCount FROM Customers
+SELECT 'customers' as TableName, COUNT(*) as RecordCount FROM customers
 UNION ALL
-SELECT 'Products', COUNT(*) FROM Products  
+SELECT 'products', COUNT(*) FROM products  
 UNION ALL
-SELECT 'Orders', COUNT(*) FROM Orders
+SELECT 'orders', COUNT(*) FROM orders
 UNION ALL
-SELECT 'OrderItemEntity', COUNT(*) FROM OrderItemEntity;
+SELECT 'order_items', COUNT(*) FROM order_items;
 
 PRINT '';
 PRINT 'Customer distribution by tier:';
 SELECT 
-    CASE Tier 
+    CASE tier 
         WHEN 0 THEN 'Regular'
         WHEN 1 THEN 'Silver'
         WHEN 2 THEN 'Gold'
         WHEN 3 THEN 'VIP'
     END as CustomerTier,
     COUNT(*) as Count
-FROM Customers 
-GROUP BY Tier 
-ORDER BY Tier;
+FROM customers 
+GROUP BY tier 
+ORDER BY tier;
 
 PRINT '';
 PRINT 'Order distribution by status:';
 SELECT 
-    CASE Status 
+    CASE status 
         WHEN -1 THEN 'Unknown'
         WHEN 0 THEN 'Pending'
         WHEN 1 THEN 'Confirmed'
@@ -236,8 +236,8 @@ SELECT
         WHEN 4 THEN 'Cancelled'
     END as OrderStatus,
     COUNT(*) as Count
-FROM Orders 
-GROUP BY Status 
-ORDER BY Status;
+FROM orders 
+GROUP BY status 
+ORDER BY status;
 
 GO

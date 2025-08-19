@@ -22,7 +22,9 @@ public static class DependencyInjection
 
         // Add DbContext with SQL Server using settings
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(settings.ConnectionStrings.DefaultConnection)
+            options
+                .UseSqlServer(settings.ConnectionStrings.DefaultConnection)
+                .UseSnakeCaseNamingConvention()
         );
 
         // Register repositories

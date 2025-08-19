@@ -1,7 +1,6 @@
 using DotnetApiGuideline.Sources.Domain.Entities;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using OrderManagement.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Infrastructure.Data;
 

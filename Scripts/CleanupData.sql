@@ -9,38 +9,38 @@ GO
 PRINT 'Starting data cleanup...';
 
 -- Disable foreign key constraints temporarily for easier deletion
-ALTER TABLE OrderItemEntity NOCHECK CONSTRAINT ALL;
-ALTER TABLE Orders NOCHECK CONSTRAINT ALL;
+ALTER TABLE order_items NOCHECK CONSTRAINT ALL;
+ALTER TABLE orders NOCHECK CONSTRAINT ALL;
 GO
 
 -- Clear all data (in correct order to respect foreign key constraints)
-DELETE FROM OrderItemEntity;
-DELETE FROM Orders;
-DELETE FROM Customers;
-DELETE FROM Products;
+DELETE FROM order_items;
+DELETE FROM orders;
+DELETE FROM customers;
+DELETE FROM products;
 GO
 
 -- Re-enable foreign key constraints
-ALTER TABLE OrderItemEntity CHECK CONSTRAINT ALL;
-ALTER TABLE Orders CHECK CONSTRAINT ALL;
+ALTER TABLE order_items CHECK CONSTRAINT ALL;
+ALTER TABLE orders CHECK CONSTRAINT ALL;
 GO
 
 -- Reset identity seeds if needed (uncomment if using IDENTITY columns)
--- DBCC CHECKIDENT ('OrderItemEntity', RESEED, 0);
--- DBCC CHECKIDENT ('Orders', RESEED, 0);
--- DBCC CHECKIDENT ('Customers', RESEED, 0);
--- DBCC CHECKIDENT ('Products', RESEED, 0);
+-- DBCC CHECKIDENT ('order_items', RESEED, 0);
+-- DBCC CHECKIDENT ('orders', RESEED, 0);
+-- DBCC CHECKIDENT ('customers', RESEED, 0);
+-- DBCC CHECKIDENT ('products', RESEED, 0);
 
 PRINT 'Data cleanup completed successfully!';
 PRINT '';
 
 -- Verify cleanup
-SELECT 'Customers' as TableName, COUNT(*) as RecordCount FROM Customers
+SELECT 'customers' as TableName, COUNT(*) as RecordCount FROM customers
 UNION ALL
-SELECT 'Products', COUNT(*) FROM Products  
+SELECT 'products', COUNT(*) FROM products  
 UNION ALL
-SELECT 'Orders', COUNT(*) FROM Orders
+SELECT 'orders', COUNT(*) FROM orders
 UNION ALL
-SELECT 'OrderItemEntity', COUNT(*) FROM OrderItemEntity;
+SELECT 'order_items', COUNT(*) FROM order_items;
 
 GO
