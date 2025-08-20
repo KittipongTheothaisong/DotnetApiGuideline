@@ -1,4 +1,4 @@
-namespace OrderManagement.Domain.ValueObjects;
+namespace DotnetApiGuideline.Sources.Domain.ValueObjects;
 
 public class Address(string street, string city, string state, string country, string zipCode)
     : IEquatable<Address>

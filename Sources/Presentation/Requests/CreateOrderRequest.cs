@@ -1,4 +1,4 @@
-using OrderManagement.Domain.ValueObjects;
+using DotnetApiGuideline.Sources.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Presentation.Requests;
 

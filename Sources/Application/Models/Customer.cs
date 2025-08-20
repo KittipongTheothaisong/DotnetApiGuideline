@@ -1,7 +1,6 @@
 using DotnetApiGuideline.Sources.Domain.Entities;
 using DotnetApiGuideline.Sources.Domain.Enums;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
-using OrderManagement.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Application.Models;
 
