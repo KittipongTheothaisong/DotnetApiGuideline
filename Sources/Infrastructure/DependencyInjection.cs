@@ -28,8 +28,8 @@ public static class DependencyInjection
             AddMongoDb(services, settings);
 
             services.AddScoped<IProductRepository, ProductMongoRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IOrderRepository, OrderMongoRepository>();
+            services.AddScoped<ICustomerRepository, CustomerMongoRepository>();
         }
         else
         {

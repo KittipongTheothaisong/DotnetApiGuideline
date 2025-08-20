@@ -28,6 +28,12 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return customer;
     }
 
+    public Task CreateCustomersAsync(IEnumerable<CustomerEntity> customers)
+    {
+        _dbContext.Customers.AddRange(customers);
+        return _dbContext.SaveChangesAsync();
+    }
+
     public async Task<CustomerEntity> UpdateCustomerAsync(CustomerEntity customer)
     {
         var existingCustomer = await GetCustomerByIdAsync(customer.Id);
@@ -38,11 +44,11 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return existingCustomer;
     }
 
-    public async Task DeleteCustomerAsync(string customerId)
+    public async Task DeleteCustomerAsync(Guid id)
     {
         var customer =
-            await GetCustomerByIdAsync(Guid.Parse(customerId))
-            ?? throw new KeyNotFoundException($"Customer with ID {customerId} not found.");
+            await GetCustomerByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Customer with ID {id} not found.");
 
         _dbContext.Customers.Remove(customer);
 

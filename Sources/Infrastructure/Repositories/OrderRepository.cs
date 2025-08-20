@@ -56,6 +56,12 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         return order;
     }
 
+    public Task CreateOrdersAsync(IEnumerable<OrderEntity> orders)
+    {
+        _dbContext.Orders.AddRange(orders);
+        return _dbContext.SaveChangesAsync();
+    }
+
     public async Task UpdateOrderAsync(OrderEntity order)
     {
         var existingOrder = await GetOrderByIdAsync(order.Id);
