@@ -7,7 +7,7 @@ namespace DotnetApiGuideline.Sources.Domain.Entities;
 public class OrderItemEntity : BaseEntity
 {
     public Guid OrderId { get; private set; }
-    public ProductEntity Product { get; private set; } = new();
+    public ProductEntity Product { get; private set; } = null!;
     public int Quantity { get; private set; }
     public Money UnitPrice { get; set; } = Money.Zero();
     public Money TotalPrice => UnitPrice * Quantity;

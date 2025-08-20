@@ -35,6 +35,12 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
         return Product;
     }
 
+    public Task CreateProductsAsync(IEnumerable<ProductEntity> products)
+    {
+        _dbContext.Products.AddRange(products);
+        return _dbContext.SaveChangesAsync();
+    }
+
     public async Task DeleteProductAsync(Guid id)
     {
         var product = await GetProductByIdAsync(id);
