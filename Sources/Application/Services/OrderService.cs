@@ -29,16 +29,19 @@ public class OrderService(
         {
             OrderNumber = orderNumber,
             Customer = customer,
-            Items = request.Items.Select(item =>
-            {
-                var product =
-                    products.FirstOrDefault(p => p.Id == item.ProductId)
-                    ?? throw new KeyNotFoundException(
-                        $"Product with ID {item.ProductId} not found."
-                    );
+            Items =
+            [
+                .. request.Items.Select(item =>
+                {
+                    var product =
+                        products.FirstOrDefault(p => p.Id == item.ProductId)
+                        ?? throw new KeyNotFoundException(
+                            $"Product with ID {item.ProductId} not found."
+                        );
 
-                return OrderItemEntity.FromProduct(product, item.Quantity);
-            }),
+                    return OrderItemEntity.FromProduct(product, item.Quantity);
+                }),
+            ],
             Status = OrderStatus.Pending,
             ShippingAddress = request.ShippingAddress,
         };
@@ -101,16 +104,19 @@ public class OrderService(
                 request.Items.Select(item => item.ProductId)
             );
 
-            order.Items = request.Items.Select(item =>
-            {
-                var product =
-                    products.FirstOrDefault(p => p.Id == item.ProductId)
-                    ?? throw new KeyNotFoundException(
-                        $"Product with ID {item.ProductId} not found."
-                    );
+            order.Items =
+            [
+                .. request.Items.Select(item =>
+                {
+                    var product =
+                        products.FirstOrDefault(p => p.Id == item.ProductId)
+                        ?? throw new KeyNotFoundException(
+                            $"Product with ID {item.ProductId} not found."
+                        );
 
-                return OrderItemEntity.FromProduct(product, item.Quantity);
-            });
+                    return OrderItemEntity.FromProduct(product, item.Quantity);
+                }),
+            ];
         }
 
         await _orderRepository.UpdateOrderAsync(order);

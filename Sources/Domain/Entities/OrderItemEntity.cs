@@ -25,7 +25,7 @@ public class OrderItemEntity : BaseEntity
             OrderId = Guid.NewGuid(),
             Product = product,
             Quantity = quantity,
-            UnitPrice = product.Price,
+            UnitPrice = new Money(product.Price.Amount, product.Price.Currency),
         };
     }
 }

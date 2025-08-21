@@ -18,25 +18,31 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 
     public async Task<OrderEntity> GetOrderByOrderNumberAsync(string orderNumber)
     {
-        return await _dbContext.Orders.FirstOrDefaultAsync(o => o.OrderNumber == orderNumber)
+        return await _dbContext
+                .Orders.IncludedAll()
+                .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber)
             ?? throw new KeyNotFoundException($"Order with Order Number {orderNumber} not found.");
     }
 
     public async Task<IEnumerable<OrderEntity>> GetOrdersAsync()
     {
-        return await _dbContext.Orders.ToListAsync();
+        return await _dbContext.Orders.IncludedAll().ToListAsync();
     }
 
     public async Task<IEnumerable<OrderEntity>> GetOrdersByCustomerEmailAsync(string customerEmail)
     {
         return await _dbContext
             .Orders.Where(order => order.Customer.Email == customerEmail)
+            .IncludedAll()
             .ToListAsync();
     }
 
     public async Task<IEnumerable<OrderEntity>> GetOrdersByStatusAsync(OrderStatus status)
     {
-        return await _dbContext.Orders.Where(order => order.Status == status).ToListAsync();
+        return await _dbContext
+            .Orders.IncludedAll()
+            .Where(order => order.Status == status)
+            .ToListAsync();
     }
 
     public async Task<bool> OrderExistsAsync(Guid id)
@@ -56,10 +62,10 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         return order;
     }
 
-    public Task CreateOrdersAsync(IEnumerable<OrderEntity> orders)
+    public async Task CreateOrdersAsync(IEnumerable<OrderEntity> orders)
     {
         _dbContext.Orders.AddRange(orders);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateOrderAsync(OrderEntity order)
@@ -75,5 +81,13 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         _dbContext.Orders.Remove(order);
 
         await _dbContext.SaveChangesAsync();
+    }
+}
+
+static class OrderRepositoryExtension
+{
+    public static IQueryable<OrderEntity> IncludedAll(this IQueryable<OrderEntity> query)
+    {
+        return query.Include(o => o.Customer).Include(o => o.Items).ThenInclude(i => i.Product);
     }
 }

@@ -20,7 +20,7 @@ public record Product(
             Name: entity.Name,
             Description: entity.Description,
             Sku: entity.Sku,
-            Price: entity.Price,
+            Price: new Money(entity.Price.Amount, entity.Price.Currency),
             StockQuantity: entity.StockQuantity,
             IsActive: entity.IsActive
         );
