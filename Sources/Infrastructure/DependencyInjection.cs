@@ -1,6 +1,3 @@
-using System.Text.RegularExpressions;
-using DotnetApiGuideline.Sources.Application.Interfaces;
-using DotnetApiGuideline.Sources.Application.Services;
 using DotnetApiGuideline.Sources.Domain.Interfaces;
 using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using DotnetApiGuideline.Sources.Infrastructure.Data;
@@ -40,13 +37,6 @@ public static class DependencyInjection
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
         }
-
-        return services;
-    }
-
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        services.AddScoped<IOrderService, OrderService>();
 
         return services;
     }
