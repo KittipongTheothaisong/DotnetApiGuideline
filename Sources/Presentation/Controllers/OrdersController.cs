@@ -2,12 +2,14 @@ using DotnetApiGuideline.Sources.Application.Interfaces;
 using DotnetApiGuideline.Sources.Domain.Enums;
 using DotnetApiGuideline.Sources.Presentation.Requests;
 using DotnetApiGuideline.Sources.Presentation.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetApiGuideline.Sources.Presentation.Controllers;
 
 [ApiController]
 [Route("api/orders")]
+[Authorize]
 public class OrdersController(IOrderService orderService) : ControllerBase
 {
     private readonly IOrderService _orderService = orderService;

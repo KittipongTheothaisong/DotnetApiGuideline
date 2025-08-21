@@ -3,9 +3,9 @@ using DotnetApiGuideline.Sources.Application.Services;
 
 namespace DotnetApiGuideline.Sources.Application;
 
-public static class DependencyInjection
+public static class ApplicationConfiguration
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IOrderService, OrderService>();
 

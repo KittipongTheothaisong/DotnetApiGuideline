@@ -1,60 +1,30 @@
-using System.Text.Json;
 using DotnetApiGuideline.Sources.Application;
 using DotnetApiGuideline.Sources.Infrastructure;
-using DotnetApiGuideline.Sources.Infrastructure.Configurations;
+using DotnetApiGuideline.Sources.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<AppSettings>(builder.Configuration);
-
-builder
-    .Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
-        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;
-        options.JsonSerializerOptions.WriteIndented = true;
-    });
-
-builder.Services.AddOpenApi();
-
+builder.Services.AddSettings(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc(
-        "v1",
-        new()
-        {
-            Title = "DotnetApiGuideline API",
-            Version = "v1",
-            Description = "A sample API following .NET API guidelines",
-        }
-    );
-});
+builder.Services.ConfigureControllers();
+builder.Services.ConfigureSwagger();
 
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+builder.Services.AddKeycloakAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
+builder.Services.AddDatabase(builder.Configuration);
+
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    await DataInitializer.InitializeAsync(scope.ServiceProvider);
-}
+await app.InitializeDatabase();
 
 if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DotnetApiGuideline API v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
+    app.ConfigureSwaggerUI();
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

@@ -2,7 +2,9 @@ using DotnetApiGuideline.Sources.Domain.Interfaces;
 using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using DotnetApiGuideline.Sources.Infrastructure.Data;
 using DotnetApiGuideline.Sources.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -10,9 +12,9 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace DotnetApiGuideline.Sources.Infrastructure;
 
-public static class DependencyInjection
+public static class InfrastructureConfiguration
 {
-    public static IServiceCollection AddInfrastructure(
+    public static IServiceCollection AddDatabase(
         this IServiceCollection services,
         IConfiguration configuration
     )
@@ -59,5 +61,38 @@ public static class DependencyInjection
         var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
 
         ConventionRegistry.Register("DefaultConventions", conventionPack, t => true);
+    }
+
+    public static IServiceCollection AddKeycloakAuthentication(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        var settings =
+            configuration.Get<AppSettings>()
+            ?? throw new InvalidOperationException("AppSettings not configured");
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = settings.Keycloak.Authority;
+                options.Audience = settings.Keycloak.Audience;
+                options.IncludeErrorDetails = true;
+                options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudience = "account",
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.FromMinutes(5),
+                    RoleClaimType = "realm_access.roles",
+                };
+            });
+
+        return services;
     }
 }
