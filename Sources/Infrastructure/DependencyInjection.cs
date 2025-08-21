@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using DotnetApiGuideline.Sources.Application.Interfaces;
 using DotnetApiGuideline.Sources.Application.Services;
 using DotnetApiGuideline.Sources.Domain.Interfaces;
@@ -66,12 +67,7 @@ public static class DependencyInjection
 
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-        var conventionPack = new ConventionPack
-        {
-            new CamelCaseElementNameConvention(),
-            new IgnoreExtraElementsConvention(true),
-            new IgnoreIfNullConvention(true),
-        };
+        var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
 
         ConventionRegistry.Register("DefaultConventions", conventionPack, t => true);
     }

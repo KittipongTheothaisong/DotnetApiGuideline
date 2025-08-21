@@ -1,13 +1,13 @@
 namespace DotnetApiGuideline.Sources.Domain.ValueObjects;
 
-public class Address(string street, string city, string state, string country, string zipCode)
+public class Address(string street, string city, string state, string zipCode, string country)
     : IEquatable<Address>
 {
-    public string Street { get; } = street ?? throw new ArgumentNullException(nameof(street));
-    public string City { get; } = city ?? throw new ArgumentNullException(nameof(city));
-    public string State { get; } = state ?? throw new ArgumentNullException(nameof(state));
-    public string Country { get; } = country ?? throw new ArgumentNullException(nameof(country));
-    public string ZipCode { get; } = zipCode ?? throw new ArgumentNullException(nameof(zipCode));
+    public string Street { get; } = street;
+    public string City { get; } = city;
+    public string State { get; } = state;
+    public string Country { get; } = country;
+    public string ZipCode { get; } = zipCode;
 
     public static Address Empty() =>
         new(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
