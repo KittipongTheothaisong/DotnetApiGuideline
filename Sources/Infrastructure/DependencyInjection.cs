@@ -17,7 +17,6 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        services.Configure<AppSettings>(configuration);
         var settings =
             configuration.Get<AppSettings>() ?? throw new Exception("App settings not found");
 

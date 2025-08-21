@@ -1,8 +1,11 @@
 using System.Text.Json;
 using DotnetApiGuideline.Sources.Application;
 using DotnetApiGuideline.Sources.Infrastructure;
+using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AppSettings>(builder.Configuration);
 
 builder
     .Services.AddControllers()
