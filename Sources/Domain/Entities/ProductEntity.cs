@@ -13,10 +13,8 @@ public class ProductEntity : BaseEntity
     public int StockQuantity { get; private set; }
     public bool IsActive { get; private set; }
 
-    // Parameterless constructor for EF Core
     protected ProductEntity() { }
 
-    // Constructor for creating new products
     public ProductEntity(
         string name,
         string description,
@@ -26,21 +24,19 @@ public class ProductEntity : BaseEntity
         bool isActive = true
     )
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrEmpty(name))
             throw new ArgumentException("Name cannot be null or empty", nameof(name));
-        if (string.IsNullOrWhiteSpace(description))
+        if (string.IsNullOrEmpty(description))
             throw new ArgumentException("Description cannot be null or empty", nameof(description));
-        if (string.IsNullOrWhiteSpace(sku))
+        if (string.IsNullOrEmpty(sku))
             throw new ArgumentException("SKU cannot be null or empty", nameof(sku));
-        if (price == null)
-            throw new ArgumentNullException(nameof(price));
         if (stockQuantity < 0)
             throw new ArgumentException("Stock quantity cannot be negative", nameof(stockQuantity));
 
         Name = name;
         Description = description;
         Sku = sku;
-        Price = price;
+        Price = price ?? throw new ArgumentNullException(nameof(price), "Price cannot be null");
         StockQuantity = stockQuantity;
         IsActive = isActive;
     }
