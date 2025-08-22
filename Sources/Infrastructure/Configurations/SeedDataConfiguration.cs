@@ -260,24 +260,22 @@ public static class SeedDataConfiguration
 
         var orders = new List<OrderEntity>
         {
-            new()
-            {
-                OrderNumber = "ORD-2024-001",
-                Customer = customers[0],
-                Items =
+            new(
+                orderNumber: "ORD-2024-001",
+                customer: customers[0],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "iPhone 15 Pro"), 1),
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "AirPods Pro"), 1),
                 ],
-                Status = OrderStatus.Delivered,
-                ShippingAddress = customers[0].Address,
-                Notes = "Customer requested express delivery",
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-002",
-                Customer = customers[1],
-                Items =
+                status: OrderStatus.Delivered,
+                shippingAddress: customers[0].Address,
+                notes: "Customer requested express delivery"
+            ),
+            new(
+                orderNumber: "ORD-2024-002",
+                customer: customers[1],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "MacBook Air M3"), 1),
                     OrderItemEntity.FromProduct(
@@ -285,23 +283,22 @@ public static class SeedDataConfiguration
                         1
                     ),
                 ],
-                Status = OrderStatus.Shipped,
-                ShippingAddress = customers[1].Address,
-                Notes = "VIP customer - priority shipping",
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-003",
-                Customer = customers[2],
-                Items = [OrderItemEntity.FromProduct(products.First(p => p.Name == "iPad Air"), 2)],
-                Status = OrderStatus.Confirmed,
-                ShippingAddress = customers[2].Address,
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-004",
-                Customer = customers[3],
-                Items =
+                status: OrderStatus.Shipped,
+                shippingAddress: customers[1].Address,
+                notes: "VIP customer - priority shipping"
+            ),
+            new(
+                orderNumber: "ORD-2024-003",
+                customer: customers[2],
+                items: [OrderItemEntity.FromProduct(products.First(p => p.Name == "iPad Air"), 2)],
+                status: OrderStatus.Confirmed,
+                shippingAddress: customers[2].Address,
+                notes: null
+            ),
+            new(
+                orderNumber: "ORD-2024-004",
+                customer: customers[3],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "AirPods Pro"), 2),
                     OrderItemEntity.FromProduct(
@@ -309,69 +306,66 @@ public static class SeedDataConfiguration
                         1
                     ),
                 ],
-                Status = OrderStatus.Pending,
-                ShippingAddress = customers[3].Address,
-                Notes = "Gift wrapping requested",
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-005",
-                Customer = customers[4],
-                Items =
+                status: OrderStatus.Pending,
+                shippingAddress: customers[3].Address,
+                notes: "Gift wrapping requested"
+            ),
+            new(
+                orderNumber: "ORD-2024-005",
+                customer: customers[4],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "iPhone 15 Pro"), 1),
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "MacBook Air M3"), 1),
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "iPad Air"), 1),
                 ],
-                Status = OrderStatus.Delivered,
-                ShippingAddress = new Address(
+                status: OrderStatus.Delivered,
+                shippingAddress: new Address(
                     "999 Alternative Address",
                     "Bangkok",
                     "Bangkok",
                     "Thailand",
                     "10400"
                 ),
-                Notes = "Bulk purchase for office",
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-006",
-                Customer = customers[5],
-                Items =
+                notes: "Bulk purchase for office"
+            ),
+            new(
+                orderNumber: "ORD-2024-006",
+                customer: customers[5],
+                items:
                 [
                     OrderItemEntity.FromProduct(
                         products.First(p => p.Name == "Apple Watch Series 9"),
                         3
                     ),
                 ],
-                Status = OrderStatus.Cancelled,
-                ShippingAddress = customers[5].Address,
-                Notes = "Customer cancelled due to delay",
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-007",
-                Customer = customers[6],
-                Items =
+                status: OrderStatus.Cancelled,
+                shippingAddress: customers[5].Address,
+                notes: "Customer cancelled due to delay"
+            ),
+            new(
+                orderNumber: "ORD-2024-007",
+                customer: customers[6],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "iPad Air"), 1),
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "AirPods Pro"), 1),
                 ],
-                Status = OrderStatus.Shipped,
-                ShippingAddress = customers[6].Address,
-            },
-            new()
-            {
-                OrderNumber = "ORD-2024-008",
-                Customer = customers[7],
-                Items =
+                status: OrderStatus.Shipped,
+                shippingAddress: customers[6].Address,
+                notes: null
+            ),
+            new(
+                orderNumber: "ORD-2024-008",
+                customer: customers[7],
+                items:
                 [
                     OrderItemEntity.FromProduct(products.First(p => p.Name == "iPhone 15 Pro"), 2),
                 ],
-                Status = OrderStatus.Confirmed,
-                ShippingAddress = customers[7].Address,
-                Notes = "Family plan purchase",
-            },
+                status: OrderStatus.Confirmed,
+                shippingAddress: customers[7].Address,
+                notes: "Family plan purchase"
+            ),
         };
 
         await orderRepository.CreateOrdersAsync(orders);

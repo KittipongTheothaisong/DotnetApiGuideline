@@ -7,4 +7,5 @@ public abstract class BaseEntity
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public Guid? UpdatedBy { get; set; }
     public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
+    public bool IsActive { get; set; } = true;
 }

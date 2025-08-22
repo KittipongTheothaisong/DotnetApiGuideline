@@ -1,3 +1,5 @@
+using DotnetApiGuideline.Sources.Presentation.Requests;
+
 namespace DotnetApiGuideline.Sources.Domain.ValueObjects;
 
 public class Address(string street, string city, string state, string zipCode, string country)
@@ -11,6 +13,17 @@ public class Address(string street, string city, string state, string zipCode, s
 
     public static Address Empty() =>
         new(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+
+    public static Address FromRequest(AddressRequest request)
+    {
+        return new Address(
+            street: request.Street,
+            city: request.City,
+            state: request.State,
+            zipCode: request.ZipCode,
+            country: request.Country
+        );
+    }
 
     public bool Equals(Address? other)
     {

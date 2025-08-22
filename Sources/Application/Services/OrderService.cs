@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
 using DotnetApiGuideline.Sources.Application.Interfaces;
 using DotnetApiGuideline.Sources.Application.Models;
 using DotnetApiGuideline.Sources.Domain.Entities;
 using DotnetApiGuideline.Sources.Domain.Enums;
 using DotnetApiGuideline.Sources.Domain.Interfaces;
+using DotnetApiGuideline.Sources.Domain.ValueObjects;
 using DotnetApiGuideline.Sources.Presentation.Requests;
 
 namespace DotnetApiGuideline.Sources.Application.Services;
@@ -25,11 +27,12 @@ public class OrderService(
             request.Items.Select(item => item.ProductId)
         );
 
-        var orderEntity = new OrderEntity
-        {
-            OrderNumber = orderNumber,
-            Customer = customer,
-            Items =
+        await EnsureCanCreateOrderAsync(request, products);
+
+        var order = new OrderEntity(
+            orderNumber: orderNumber,
+            customer: customer,
+            items:
             [
                 .. request.Items.Select(item =>
                 {
@@ -42,11 +45,12 @@ public class OrderService(
                     return OrderItemEntity.FromProduct(product, item.Quantity);
                 }),
             ],
-            Status = OrderStatus.Pending,
-            ShippingAddress = request.ShippingAddress,
-        };
+            status: OrderStatus.Pending,
+            shippingAddress: Address.FromRequest(request.ShippingAddress),
+            notes: request.Notes
+        );
 
-        var createdOrder = await _orderRepository.CreateOrderAsync(orderEntity);
+        var createdOrder = await _orderRepository.CreateOrderAsync(order);
 
         return Order.FromEntity(createdOrder);
     }
@@ -94,8 +98,10 @@ public class OrderService(
     public async Task<Order> UpdateOrderAsync(Guid id, UpdateOrderRequest request)
     {
         var order = await _orderRepository.GetOrderByIdAsync(id);
+        var address =
+            request.ShippingAddress != null ? Address.FromRequest(request.ShippingAddress) : null;
 
-        order.ShippingAddress = request.ShippingAddress ?? order.ShippingAddress;
+        order.ShippingAddress = address ?? order.ShippingAddress;
         order.Notes = request.Notes ?? order.Notes;
 
         if (request.Items != null && request.Items.Count != 0)
@@ -127,7 +133,7 @@ public class OrderService(
     public async Task<Order> UpdateOrderStatusAsync(Guid id, OrderStatus status)
     {
         var order = await _orderRepository.GetOrderByIdAsync(id);
-        order.Status = status;
+        order.ChangeStatus(status);
 
         await _orderRepository.UpdateOrderAsync(order);
 
@@ -137,5 +143,28 @@ public class OrderService(
     private static async Task<string> GenerateOrderNumberAsync()
     {
         return await Task.FromResult(Guid.NewGuid().ToString());
+    }
+
+    private async Task EnsureCanCreateOrderAsync(
+        CreateOrderRequest request,
+        IEnumerable<ProductEntity> products
+    )
+    {
+        var customer =
+            await _customerRepository.GetCustomerByIdAsync(request.CustomerId)
+            ?? throw new ValidationException("Customer not found");
+
+        if (!customer.IsActive)
+            throw new ValidationException("Customer account is not active");
+
+        foreach (var item in request.Items)
+        {
+            var product =
+                products.FirstOrDefault(p => p.Id == item.ProductId)
+                ?? throw new ValidationException($"Product {item.ProductId} not found");
+
+            if (product.StockQuantity < item.Quantity)
+                throw new ValidationException($"Insufficient stock for product {product.Name}");
+        }
     }
 }

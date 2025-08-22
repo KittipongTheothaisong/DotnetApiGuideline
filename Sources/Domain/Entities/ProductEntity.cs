@@ -11,7 +11,6 @@ public class ProductEntity : BaseEntity
     public string Sku { get; private set; } = string.Empty;
     public Money Price { get; private set; } = Money.Zero();
     public int StockQuantity { get; private set; }
-    public bool IsActive { get; private set; }
 
     protected ProductEntity() { }
 
