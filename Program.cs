@@ -1,23 +1,24 @@
 using DotnetApiGuideline.Sources.Application;
-using DotnetApiGuideline.Sources.Infrastructure;
-using DotnetApiGuideline.Sources.Presentation.Extensions;
+using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<AppSettings>(builder.Configuration);
 
-builder.Services.AddSettings(builder.Configuration);
+builder.Services.AddConfiguredControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureControllers();
-builder.Services.ConfigureSwagger();
+builder.Services.AddConfiguredSwagger();
 
-builder.Services.AddKeycloakAuthentication(builder.Configuration);
+builder.Services.AddConfiguredAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
-builder.Services.AddDatabase(builder.Configuration);
 
-builder.Services.AddApplicationServices();
+builder.Services.AddConfiguredDatabase(builder.Configuration);
+builder.Services.AddConfiguredRepositories(builder.Configuration);
+
+builder.Services.AddConfiguredServices();
 
 var app = builder.Build();
 
-await app.InitializeDatabase();
+await app.ConfigureSeedDataAsync();
 
 if (app.Environment.IsDevelopment())
     app.ConfigureSwaggerUI();

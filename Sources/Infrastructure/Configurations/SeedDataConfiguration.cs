@@ -3,13 +3,15 @@ using DotnetApiGuideline.Sources.Domain.Enums;
 using DotnetApiGuideline.Sources.Domain.Interfaces;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
 
-namespace DotnetApiGuideline.Sources.Infrastructure;
+namespace DotnetApiGuideline.Sources.Infrastructure.Configurations;
 
-public class DataInitializer
+public static class SeedDataConfiguration
 {
-    public static async Task InitializeAsync(IServiceProvider serviceProvider)
+    public static async Task ConfigureSeedDataAsync(this WebApplication app)
     {
-        using var scope = serviceProvider.CreateScope();
+        using var scope = app.Services.CreateScope();
+        var serviceProvider = scope.ServiceProvider;
+
         var productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
         var customerRepository = scope.ServiceProvider.GetRequiredService<ICustomerRepository>();
         var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();

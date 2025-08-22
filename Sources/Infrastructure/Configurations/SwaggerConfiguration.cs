@@ -1,36 +1,10 @@
-using System.Text.Json;
-using DotnetApiGuideline.Sources.Infrastructure.Configurations;
 using Microsoft.OpenApi.Models;
 
-namespace DotnetApiGuideline.Sources.Presentation.Extensions;
+namespace DotnetApiGuideline.Sources.Infrastructure.Configurations;
 
-public static class ServiceCollectionExtensions
+public static class SwaggerConfiguration
 {
-    public static IServiceCollection AddSettings(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
-    {
-        services.Configure<AppSettings>(configuration);
-        return services;
-    }
-
-    public static IServiceCollection ConfigureControllers(this IServiceCollection services)
-    {
-        services
-            .AddControllers()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNamingPolicy =
-                    JsonNamingPolicy.SnakeCaseLower;
-                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;
-                options.JsonSerializerOptions.WriteIndented = true;
-            });
-
-        return services;
-    }
-
-    public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
+    public static IServiceCollection AddConfiguredSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
         {
@@ -77,5 +51,15 @@ public static class ServiceCollectionExtensions
         });
 
         return services;
+    }
+
+    public static void ConfigureSwaggerUI(this WebApplication app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "DotnetApiGuideline API v1");
+            c.RoutePrefix = string.Empty;
+        });
     }
 }

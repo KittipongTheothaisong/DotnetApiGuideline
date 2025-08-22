@@ -5,7 +5,7 @@ namespace DotnetApiGuideline.Sources.Application;
 
 public static class ApplicationConfiguration
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddConfiguredServices(this IServiceCollection services)
     {
         services.AddScoped<IOrderService, OrderService>();
 
