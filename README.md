@@ -16,6 +16,92 @@
 
 <img width="1314" height="734" alt="Web Api Architecture" src="https://github.com/user-attachments/assets/a4b73a4f-5ce1-47da-9141-1b7b55d6218e" />
 
+```
+.
+├── 📂 Sources                   # โฟลเดอร์หลักที่เก็บซอร์สโค้ดทั้งหมด
+│   ├── 📂 Application           # Layer 2: Application Layer (Use Cases)
+│   │   ├── 📂 Interfaces
+│   │   │   └── 📜 IOrderService.cs
+│   │   ├── 📂 Models
+│   │   │   ├── 📜 Customer.cs
+│   │   │   ├── 📜 Order.cs
+│   │   │   ├── 📜 OrderItem.cs
+│   │   │   └── 📜 Product.cs
+│   │   └── 📂 Services
+│   │       └── 📜 OrderService.cs
+│   │
+│   ├── 📂 Domain                # Layer 1: Domain Layer (Core Business Logic)
+│   │   ├── 📂 Entities
+│   │   │   ├── 📜 BaseEntity.cs
+│   │   │   ├── 📜 CustomerEntity.cs
+│   │   │   ├── 📜 OrderEntity.cs
+│   │   │   ├── 📜 OrderItemEntity.cs
+│   │   │   └── 📜 ProductEntity.cs
+│   │   ├── 📂 Enums
+│   │   │   ├── 📜 CustomerTier.cs
+│   │   │   └── 📜 OrderStatus.cs
+│   │   ├── 📂 Exceptions
+│   │   │   └── 📜 DomainException.cs
+│   │   ├── 📂 Interfaces
+│   │   │   ├── 📜 ICustomerRepository.cs
+│   │   │   ├── 📜 IOrderRepository.cs
+│   │   │   └── 📜 IProductRepository.cs
+│   │   └── 📂 ValueObjects
+│   │       ├── 📜 Address.cs
+│   │       ├── 📜 Email.cs
+│   │       └── 📜 Money.cs
+│   │
+│   ├── 📂 Infrastructure         # Layer 3: Infrastructure Layer (External Concerns)
+│   │   ├── 📂 Configurations
+│   │   │   ├── 📜 AppSettings.cs
+│   │   │   ├── 📜 AuthenticationConfiguration.cs
+│   │   │   ├── 📜 DatabaseConfiguration.cs
+│   │   │   ├── 📜 RepositoriesConfiguration.cs
+│   │   │   ├── 📜 SeedDataConfiguration.cs
+│   │   │   └── 📜 SwaggerConfiguration.cs
+│   │   ├── 📂 Data
+│   │   │   ├── 📜 AppDbContext.cs
+│   │   │   └── 📜 MongoDbContext.cs
+│   │   └── 📂 Repositories
+│   │       ├── 📜 CustomerMongoRepository.cs
+│   │       ├── 📜 CustomerRepository.cs
+│   │       ├── 📜 OrderMongoRepository.cs
+│   │       ├── 📜 OrderRepository.cs
+│   │       ├── 📜 ProductMongoRepository.cs
+│   │       └── 📜 ProductRepository.cs
+│   │
+│   └── 📂 Presentation          # Layer 4: Presentation Layer (API)
+│       ├── 📂 Configurations
+│       │   └── 📜 ApiBehaviorOptionsConfiguration.cs
+│       ├── 📂 Controllers
+│       │   └── 📜 OrdersController.cs
+│       ├── 📂 Middlewares
+│       │   └── 📜 GlobalExceptionHandlingMiddleware.cs
+│       ├── 📂 Requests
+│       │   ├── 📜 AddressRequest.cs
+│       │   ├── 📜 CreateOrderRequest.cs
+│       │   ├── 📜 OrderItemRequest.cs
+│       │   └── 📜 UpdateOrderRequest.cs
+│       ├── 📂 Responses
+│       │   ├── 📜 AddressResponse.cs
+│       │   ├── 📜 CustomerResponse.cs
+│       │   ├── 📜 ErrorResponse.cs
+│       │   ├── 📜 OrderItemResponse.cs
+│       │   └── 📜 OrderResponse.cs
+│       └── 📂 Validators
+│           ├── 📜 CreateAddressRequestValidator.cs
+│           ├── 📜 CreateOrderRequestValidator.cs
+│           ├── 📜 OrderItemRequestValidator.cs
+│           └── 📜 UpdateOrderRequestValidator.cs
+│
+├── 📂 Migrations                # โฟลเดอร์สำหรับ EF Core Migrations
+├── 📜 appsettings.json          #ไฟล์ Configuration หลัก
+├── 📜 docker-compose.yml       #ไฟล์สำหรับจัดการ Docker Containers
+├── 📜 DotnetApiGuideline.csproj  #ไฟล์โปรเจกต์ .NET
+├── 📜 Program.cs                 #ไฟล์ Entry Point ของแอปพลิเคชัน
+└── 📜 tools.py                   #สคริปต์สำหรับช่วยจัดการ Environment
+```
+
 #### **a. `Sources/Domain`: หัวใจของธุรกิจของคุณ**
 
 นี่คือ Layer ที่เป็นอิสระและสำคัญที่สุด เปรียบเสมือนพิมพ์เขียวของธุรกิจคุณในรูปแบบของโค้ด มันนิยาม "อะไร" คือธุรกิจของคุณ แต่ไม่สนใจว่า "อย่างไร" ที่จะจัดเก็บหรือแสดงผลข้อมูล
