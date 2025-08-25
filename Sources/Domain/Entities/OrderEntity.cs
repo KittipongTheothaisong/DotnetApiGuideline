@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using DotnetApiGuideline.Sources.Domain.Enums;
+using DotnetApiGuideline.Sources.Domain.Exceptions;
 using DotnetApiGuideline.Sources.Domain.ValueObjects;
 
 namespace DotnetApiGuideline.Sources.Domain.Entities;
@@ -39,7 +40,7 @@ public class OrderEntity : BaseEntity
     public void ChangeStatus(OrderStatus newStatus)
     {
         if (!IsValidStatusTransition(Status, newStatus))
-            throw new Exception($"Cannot transition from {Status} to {newStatus}");
+            throw new DomainException($"Cannot transition from {Status} to {newStatus}");
 
         Status = newStatus;
     }

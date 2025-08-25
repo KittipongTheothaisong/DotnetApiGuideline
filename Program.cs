@@ -1,6 +1,8 @@
 using DotnetApiGuideline.Sources.Application;
 using DotnetApiGuideline.Sources.Infrastructure.Configurations;
-using DotnetApiGuideline.Sources.Presentation.Requests;
+using DotnetApiGuideline.Sources.Presentation.Configurations;
+using DotnetApiGuideline.Sources.Presentation.Middlewares;
+using DotnetApiGuideline.Sources.Presentation.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -11,8 +13,10 @@ builder.Services.AddConfiguredControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddConfiguredSwagger();
 
-builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequest>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
+builder.Services.ConfigureOptions<ApiBehaviorOptionsConfiguration>();
 
 builder.Services.AddConfiguredAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
@@ -25,6 +29,8 @@ builder.Services.AddConfiguredServices();
 var app = builder.Build();
 
 await app.ConfigureSeedDataAsync();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
     app.ConfigureSwaggerUI();
